@@ -7,7 +7,7 @@ run:
 
 build-app:
 	python3 -m pip install pyinstaller
-	pyinstaller --onefile  src/main.py --noconsole
+	pyinstaller  src/main.py --noconsole
 
 clean:
 	rm *.spec
