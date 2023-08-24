@@ -1,6 +1,4 @@
-
-import pygame
-import sys
+import pygame, sys
 
 # Initialize Pygame
 pygame.init()
@@ -16,6 +14,7 @@ background = pygame.image.load('assets/wp5381270-epic-winter-fantasy-wallpapers.
 # Define colors
 WHITE = (255, 255, 255)
 BUTTON_COLOR = (120, 160, 180)
+HOVER_COLOR = (150, 190, 210)  # Color when button is hovered over
 
 # Create a button rect
 buttonPlay = pygame.Rect(0, 0, 200, 60)
@@ -34,7 +33,11 @@ button_text_Exit = Buttonfont.render("Exit", True, WHITE)
 
 # Create text
 title_text = Titlefont.render('The Snowy Paths', True, WHITE)
-title_rect = title_text.get_rect(center=(screen.get_width() // 2, 300))
+title_rect = title_text.get_rect(center=(screen.get_width() // 2, 250))
+
+hovered_play = False  # To track if the mouse is over the play button
+hovered_exit = False  # To track if the mouse is over the exit button
+
 
 running = True
 while running:
@@ -42,14 +45,40 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        if event.type == pygame.MOUSEMOTION:
+            if buttonPlay.collidepoint(event.pos):
+                hovered_play = True
+            else:
+                hovered_play = False
+            if buttonExit.collidepoint(event.pos):
+                hovered_exit = True
+            else:
+                hovered_exit = False
+
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Left mouse button
                 if buttonExit.collidepoint(event.pos):
                     running = False
 
+
+    
+    # Animate exit button hover
+    if hovered_exit:
+        BUTTON_COLOR_exit = HOVER_COLOR
+    else:
+        BUTTON_COLOR_exit = BUTTON_COLOR
+    
+    # Animate play button hover
+    if hovered_play:
+        BUTTON_COLOR_play = HOVER_COLOR
+    else:
+        BUTTON_COLOR_play = BUTTON_COLOR
+
     screen.blit(background, (0, 0))
-    pygame.draw.rect(screen, BUTTON_COLOR, buttonExit, border_radius = 12)
-    pygame.draw.rect(screen, BUTTON_COLOR, buttonPlay, border_radius = 12)
+    
+    pygame.draw.rect(screen, BUTTON_COLOR_exit, buttonExit, border_radius=12)
+    pygame.draw.rect(screen, BUTTON_COLOR_play, buttonPlay, border_radius=12)
 
     # Center the text on the buttons
     text_rect = button_text_Exit.get_rect(center=buttonExit.center)
