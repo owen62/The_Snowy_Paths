@@ -6,6 +6,7 @@ run:
 	python3 src/main.py
 
 build-app:
+	pip install pyinstaller
 	pyinstaller --onefile  src/main.py --noconsole
 
 clean:
