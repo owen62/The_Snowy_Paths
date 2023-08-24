@@ -3,8 +3,6 @@ name: Creating Python App
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 permissions:
   contents: write
@@ -96,7 +94,7 @@ jobs:
         uses: actions/create-release@v1
         id: create_release
         with:
-          release_name: ${{ steps.version.outputs.version }}
+          release_name: ${{ github.run_number }}
           tag_name: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
