@@ -7,11 +7,11 @@ run:
 
 build-app:
 	python3 -m pip install pyinstaller
-	pyinstaller --onefile  src/main.py --noconsole --add-data "Icon" --icon "Icon/dragon_icon.ico"
+	pyinstaller --onefile  src/main.py --noconsole --add-data "Icon:Icon" --icon "Icon/dragon_icon.ico"
 
 macos-build-app:
 	python3 -m pip install pyinstaller
-	pyinstaller --onefile  src/main.py --noconsole --add-data "Icon" --icon "Icon/dragon_icon.icns"
+	pyinstaller --onefile  src/main.py --noconsole --add-data "Icon:Icon" --icon "Icon/dragon_icon.icns"
 
 clean:
 	rm *.spec
