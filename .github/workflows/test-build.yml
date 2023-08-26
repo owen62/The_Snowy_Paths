@@ -17,17 +17,17 @@ jobs:
       - uses: actions/setup-node@v3
 
       - name: Installing Make ⬇️
-        if: ${{ matrix.os }} == 'windows-latest'
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
           Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
           choco install make
       
       - name: Installing Make ⬇️
-        if: ${{ matrix.os }} == 'ubuntu-latest'
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: sudo apt-get install make
       
       - name: Installing Make ⬇️
-        if: ${{ matrix.os }} == 'macos-latest'
+        if: ${{ matrix.os == 'macos-latest'}}
         run: brew install make
       
       - name: Installing Python Dependencies
