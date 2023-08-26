@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['src/main.py'],
+    ['src\\main.py'],
     pathex=[],
     binaries=[],
     datas=[('Icon', 'Icon'), ('assets', 'assets')],
@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['Icon/dragon_icon.ico'],
+    icon=['Icon\\dragon_icon.ico'],
 )

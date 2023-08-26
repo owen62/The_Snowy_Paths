@@ -6,7 +6,7 @@ run:
 	python3 src/main.py
 
 build-windows-latest:
-	pyinstaller src/main.py --onefile --noconsole  --clean --add-data Icon;Icon --add-data assets;assets --icon "Icon/dragon_icon.ico"
+	pyinstaller src/main.py --onefile --noconsole  --clean --add-data "Icon;Icon" --add-data "assets;assets" --icon "Icon/dragon_icon.ico"
 
 build-macos-latest:
 	pyinstaller src/main.py --onefile --noconsole  --clean --add-data Icon:Icon --add-data assets:assets --icon "Icon/dragon_icon.icns"
