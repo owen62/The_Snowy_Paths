@@ -1,6 +1,13 @@
-import pygame,sys
+import pygame
+import sys
+import os 
 import random
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 # Initialize Pygame
 pygame.init()
@@ -10,8 +17,8 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption('Un livre dont vous êtes le héros')
 
 # Load icon and background
-programIcon = pygame.image.load('Icon/dragon_icon.png')
-background = pygame.image.load('assets/wp5381270-epic-winter-fantasy-wallpapers.jpg')
+programIcon = pygame.image.load(resource_path('Icon/dragon_icon.png'))
+background = pygame.image.load(resource_path('assets/wp5381270-epic-winter-fantasy-wallpapers.jpg'))
 
 # Define colors
 WHITE = (255, 255, 255)
@@ -21,11 +28,11 @@ HOVER_COLOR = (150, 190, 210)  # Color when button is hovered over
 
 # Set up font
 Buttonfont = pygame.font.Font(None, 30)
-Titlefont = pygame.font.Font("Icon/You Are Scared.ttf", 80)
+Titlefont = pygame.font.Font(resource_path("Icon/You Are Scared.ttf"), 80)
 
 #Music
-m1 = pygame.mixer.Sound("wind-outside-sound-ambient-141989.mp3")
-m2 = pygame.mixer.Sound("a-piano-with-a-creepy-atmosphere-for-scary-stories-demo-version-158423.mp3")
+m1 = pygame.mixer.Sound(resource_path("music/wind-outside-sound-ambient-141989.mp3"))
+m2 = pygame.mixer.Sound(resource_path("a-piano-with-a-creepy-atmosphere-for-scary-stories-demo-version-158423.mp3"))
 
 # Set volume for the music tracks
 m1.set_volume(0.9)

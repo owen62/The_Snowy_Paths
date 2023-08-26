@@ -1,0 +1,102 @@
+name: Creating Python App
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ] 
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Installing Make ⬇️
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          choco install make
+      
+      - name: Installing Make ⬇️
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: sudo apt-get install make
+      
+      - name: Installing Make ⬇️
+        if: ${{ matrix.os == 'macos-latest'}}
+        run: brew install make
+      
+      - name: Installing Python Dependencies
+        run: make install
+      
+      - name: Building Projects ⚙️
+        run: make build-${{ matrix.os }}
+      
+      - name: Upload artifact release 🚀
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}
+          path: ./dist/main.exe
+      
+      - name: Upload artifact release 🚀
+        if: ${{ matrix.os != 'windows-latest' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}
+          path: ./dist
+
+  release-project:
+    name: Release project
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Download Windows artifact content ⬇️
+        uses: actions/download-artifact@v2
+        with:
+          path: .
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Windows Release 🚀
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: windows-latest/main.exe
+          asset_name: the_snowy_paths_windows-v${{ github.run_number }}.exe
+          asset_content_type: application/x-msdownload
+
+      - name: Upload MacoOS Release 🚀
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: macos-latest/main
+          asset_name: the_snowy_paths_macos-v${{ github.run_number }}
+          asset_content_type: application/octet-stream
+
+      - name: Upload Ubuntu Release 🚀
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with: 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ubuntu-latest/main
+          asset_name: the_snowy_paths_ubuntu-v${{ github.run_number }}
+          asset_content_type: application/octet-stream
