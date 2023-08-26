@@ -60,9 +60,6 @@ jobs:
         with:
           path: .
         
-      - name: view what is in the directory
-        run: ls
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -82,7 +79,7 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: windows-latest
           asset_name: the_snowy_paths_windows-v${{ github.run_number }}.exe
-          asset_content_type: application/octet-stream
+          asset_content_type: application/x-msdownload
 
       - name: Upload MacoOS Release 🚀
         uses: actions/upload-release-asset@v1
