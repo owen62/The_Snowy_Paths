@@ -32,7 +32,7 @@ Titlefont = pygame.font.Font(resource_path("Icon/You Are Scared.ttf"), 80)
 
 #Music
 m1 = pygame.mixer.Sound(resource_path("music/wind-outside-sound-ambient-141989.mp3"))
-m2 = pygame.mixer.Sound(resource_path("a-piano-with-a-creepy-atmosphere-for-scary-stories-demo-version-158423.mp3"))
+m2 = pygame.mixer.Sound(resource_path("music/a-piano-with-a-creepy-atmosphere-for-scary-stories-demo-version-158423.mp3"))
 
 # Set volume for the music tracks
 m1.set_volume(0.9)
