@@ -6,13 +6,13 @@ run:
 	python3 src/main.py
 
 build-windows-latest:
-	pyinstaller src/main.py --onefile --noconsole  --clean --add-data "icon;icon" --add-data "assets;assets" --icon "Icon/dragon_icon.ico" --add-data music;music
+	pyinstaller src/main.py --onefile --noconsole  --clean --add-data "Icon;Icon" --add-data "assets;assets" --Icon "Icon/dragon_Icon.ico" --add-data music;music
 
 build-macos-latest:
-	pyinstaller src/main.py --onefile --noconsole  --clean --add-data icon:icon --add-data assets:assets --icon "Icon/dragon_icon.icns" --add-data music:music
+	pyinstaller src/main.py --onefile --noconsole  --clean --add-data Icon:Icon --add-data assets:assets --Icon "Icon/dragon_Icon.icns" --add-data music:music
 
 build-ubuntu-latest:
-	pyinstaller src/main.py --onefile --noconsole  --clean --add-data icon:icon --add-data assets:assets --icon "Icon/dragon_icon.ico" --add-data music:music
+	pyinstaller src/main.py --onefile --noconsole  --clean --add-data Icon:Icon --add-data assets:assets --Icon "Icon/dragon_Icon.ico" --add-data music:music
 
 clean:
 	rm *.spec
