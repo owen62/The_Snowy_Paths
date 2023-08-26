@@ -14,7 +14,7 @@ jobs:
         os: [ windows-latest, ubuntu-latest, macos-latest ] 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
 
       - name: Installing Make ⬇️
         if: ${{ matrix.os == 'windows-latest' }}
