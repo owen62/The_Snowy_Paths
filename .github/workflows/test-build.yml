@@ -36,14 +36,19 @@ jobs:
       - name: Building Projects ⚙️
         run: make build-${{ matrix.os }}
       
-      - name: preparing artifact ✨
-        run: cp ./dist/$(ls dist) ./${{ matrix.os }}
-      
       - name: Upload artifact release 🚀
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os }}
-          path: ${{ matrix.os }}
+          path: ./dist/main.exe
+      
+      - name: Upload artifact release 🚀
+        if: ${{ matrix.os != 'windows-latest' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}
+          path: ./dist/main
 
   release-project:
     name: Release project
