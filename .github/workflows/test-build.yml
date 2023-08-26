@@ -8,87 +8,50 @@ permissions:
   contents: write
 
 jobs:
-  build-windows:
-    name: Build windows
-    runs-on: windows-latest
+  build:
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ] 
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout code 🔍
-        uses: actions/checkout@v2
-      - name: Installing Chocolatey ⬇️
-        run: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-      - name: Installing Make ⬇️
-        run: choco install make
-      - name: Installing dependencies 🛠️
-        run: make install
-      - name: Building Projects ⚙️
-        run: make build-app
-      - name: Copy exe to root ✨
-        run: cp ./dist/main.exe ./the_snowy_paths_windows.exe
-      - name: Upload artifact release 🚀
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifact-windows
-          path: ./the_snowy_paths_windows.exe
-  
-  build-ubuntu:
-    name: Build ubuntu
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code 🔍
-        uses: actions/checkout@v2
-      - name: Installing make ⬇️
-        run:  sudo apt-get install make
-      - name: Installing dependencies 🛠️
-        run: make install
-      - name: Building projects ⚙️
-        run: make build-app
-      - name: Copy exe to root ✨
-        run: cp ./dist/main ./the_snowy_paths_ubuntu
-      - name: Upload artifact release 🚀
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifact-ubuntu
-          path: ./the_snowy_paths_ubuntu
+      - uses: actions/setup-node@v3
 
-  build-macos:
-    name: Build macos
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code 🔍
-        uses: actions/checkout@v2
       - name: Installing Make ⬇️
+        if: ${{ matrix.os }} == 'windows-latest'
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          choco install make
+      
+      - name: Installing Make ⬇️
+        if: ${{ matrix.os }} == 'ubuntu-latest'
+        run: sudo apt-get install make
+      
+      - name: Installing Make ⬇️
+        if: ${{ matrix.os }} == 'macos-latest'
         run: brew install make
-      - name: Installing dependencies 🛠️
+      
+      - name: Installing Python Dependencies
         run: make install
-      - name: Building projects ⚙️
-        run: make macos-build-app
-      - name: Copy exe to root ✨
-        run: cp ./dist/main ./the_snowy_paths_macos
+      
+      - name: Building Projects ⚙️
+        run: make build-${{ matrix.os }}
+      
+      - name: preparing artifact ✨
+        run: mv ./dist/* ${{ matrix.os }}
+      
       - name: Upload artifact release 🚀
         uses: actions/upload-artifact@v2
         with:
-          name: artifact-macos
-          path: ./the_snowy_paths_macos
+          name: ${{ matrix.os }}
+          path: ${{ matrix.os }}
 
   release-project:
     name: Release project
     runs-on: ubuntu-latest
-    needs: [ build-windows, build-macos, build-ubuntu ]
+    needs: [ build ]
     steps:
       - name: Download Windows artifact content ⬇️
         uses: actions/download-artifact@v2
-        with:
-          name: artifact-windows
-
-      - name: Download MacOS artifact content ⬇️
-        uses: actions/download-artifact@v2
-        with:
-          name: artifact-macos
-
-      - name: Download Ubuntu artifact content ⬇️
-        uses: actions/download-artifact@v2
-        with:
-          name: artifact-ubuntu
 
       - name: Create Release
         id: create_release
@@ -107,7 +70,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./the_snowy_paths_windows.exe
+          asset_path: windows-latest
           asset_name: the_snowy_paths_windows-v${{ github.run_number }}.exe
           asset_content_type: application/octet-stream
 
@@ -117,7 +80,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./the_snowy_paths_macos
+          asset_path: macos-latest
           asset_name: the_snowy_paths_macos-v${{ github.run_number }}
           asset_content_type: application/octet-stream
 
@@ -127,6 +90,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with: 
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./the_snowy_paths_ubuntu
+          asset_path: ubuntu-latest
           asset_name: the_snowy_paths_ubuntu-v${{ github.run_number }}
           asset_content_type: application/octet-stream

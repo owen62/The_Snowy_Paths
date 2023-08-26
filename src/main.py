@@ -1,6 +1,13 @@
 
 import pygame
 import sys
+import os 
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
 # Initialize Pygame
 pygame.init()
@@ -10,8 +17,8 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption('Un livre dont vous êtes le héros')
 
 # Load icon and background
-programIcon = pygame.image.load('Icon/dragon_icon.png')
-background = pygame.image.load('assets/wp5381270-epic-winter-fantasy-wallpapers.jpg')
+programIcon = pygame.image.load(resource_path('Icon/dragon_icon.png'))
+background = pygame.image.load(resource_path('assets/wp5381270-epic-winter-fantasy-wallpapers.jpg'))
 
 # Define colors
 WHITE = (255, 255, 255)
@@ -27,7 +34,7 @@ buttonExit.center = (screen.get_width() // 2, screen.get_height() // 2 + 80)
 
 # Set up font
 Buttonfont = pygame.font.Font(None, 30)
-Titlefont = pygame.font.Font("Icon/You Are Scared.ttf", 80)
+Titlefont = pygame.font.Font(resource_path("Icon/You Are Scared.ttf"), 80)
 
 button_text_Play = Buttonfont.render("Play", True, WHITE)
 button_text_Exit = Buttonfont.render("Exit", True, WHITE)
