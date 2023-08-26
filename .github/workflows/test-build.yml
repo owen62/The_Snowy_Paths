@@ -37,7 +37,7 @@ jobs:
         run: make build-${{ matrix.os }}
       
       - name: preparing artifact ✨
-        run: mv ./dist/${ls dist} ./${{ matrix.os }}
+        run: mv ./dist/$(ls dist) ./${{ matrix.os }}
       
       - name: Upload artifact release 🚀
         uses: actions/upload-artifact@v2
