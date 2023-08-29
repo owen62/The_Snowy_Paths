@@ -1,7 +1,6 @@
 import pygame,sys
 import random
 
-
 # Initialize Pygame
 pygame.init()
 
@@ -13,6 +12,12 @@ pygame.display.set_caption('Un livre dont vous êtes le héros')
 programIcon = pygame.image.load('Icon/dragon_icon.png')
 background = pygame.image.load('assets/wp5381270-epic-winter-fantasy-wallpapers.jpg')
 
+# Get the screen dimensions
+screen_width, screen_height = screen.get_size()
+
+# Resize the background image to fit the screen
+background = pygame.transform.scale(background, (screen_width, screen_height))
+
 # Define colors
 WHITE = (255, 255, 255)
 SINISTER_COLOR = (50, 50, 50)
@@ -21,7 +26,7 @@ HOVER_COLOR = (150, 190, 210)  # Color when button is hovered over
 
 # Set up font
 Buttonfont = pygame.font.Font(None, 30)
-Titlefont = pygame.font.Font("Icon/You Are Scared.ttf", 80)
+Titlefont = pygame.font.Font("Icon/You Are Scared.ttf", 95)
 
 #Music
 m1 = pygame.mixer.Sound("wind-outside-sound-ambient-141989.mp3")
@@ -37,7 +42,7 @@ m2.play(-1)
 
 # Create text
 title_text = Titlefont.render('The Snowy Paths', True, WHITE)
-title_rect = title_text.get_rect(center=(screen.get_width() // 2, 250))
+title_rect = title_text.get_rect(center=(screen.get_width() // 2, 180))
 
 # Snowflake class
 class Snowflake:
@@ -59,14 +64,15 @@ class Snowflake:
 def draw_buttons(button, color):
     pygame.draw.rect(screen, color, button, border_radius=12)
 
+
 def main():
     # Create a button rect
     buttonPlay = pygame.Rect(0, 0, 200, 60)
     buttonExit = pygame.Rect(0, 0, 200, 60)
     
     # Center the buttons on the screen
-    buttonPlay.center = (screen.get_width() // 2, screen.get_height() // 2 - 40)
-    buttonExit.center = (screen.get_width() // 2, screen.get_height() // 2 + 80)
+    buttonPlay.center = (screen.get_width() // 2, screen.get_height() // 2 - 30)
+    buttonExit.center = (screen.get_width() // 2, screen.get_height() // 2 + 90)
 
     button_text_Play = Buttonfont.render("Play", True, WHITE)
     button_text_Exit = Buttonfont.render("Exit", True, WHITE)
